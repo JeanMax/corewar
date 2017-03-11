@@ -6,7 +6,7 @@
 /*   By: mcanal <zboub@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/14 18:21:04 by mcanal            #+#    #+#             */
-/*   Updated: 2017/03/10 17:04:51 by mcanal           ###   ########.fr       */
+/*   Updated: 2017/03/11 18:51:19 by mcanal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,12 @@
 # define ASM_H
 
 # include "util.h"
+# include "op.h"
 
 /*
-** todo.c
+** parse.c
 */
+void    parse(char *filename);
+
 
 #endif
