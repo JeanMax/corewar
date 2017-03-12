@@ -6,13 +6,15 @@
 /*   By: zaz <marvin@42.fr>                         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/10/04 11:33:27 by zaz               #+#    #+#             */
-/*   Updated: 2017/03/11 18:52:11 by mcanal           ###   ########.fr       */
+/*   Updated: 2017/03/12 22:06:09 by mcanal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef OP_H
 
 # define OP_H
+
+# include "asm.h"
 
 /*
 ** Toutes les tailles sont en octets.
@@ -78,5 +80,24 @@ typedef struct		header_s
 	unsigned int		prog_size;
 	char				comment[COMMENT_LENGTH + 1];
 }					header_t;
+
+
+# define MAX_ARG				(3)
+# define CODE_LENGTH			(8)
+# define DESC_LENGTH			(128)
+
+typedef unsigned char			t_byte;
+
+typedef struct		s_op
+{
+	char				*name;
+	unsigned int		arg_count;
+	t_arg_type			arg_type[MAX_ARG];
+	t_byte				code;
+	unsigned int		cycles_count; //TODO: ???
+	char				*desc;
+	t_bool				carry;
+	t_bool				todo; //TODO: ???
+}					t_op;
 
 #endif

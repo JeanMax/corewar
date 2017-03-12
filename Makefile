@@ -6,7 +6,7 @@
 #    By: mcanal <mcanal@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2014/11/29 13:16:03 by mcanal            #+#    #+#              #
-#    Updated: 2017/03/11 17:48:43 by mcanal           ###   ########.fr        #
+#    Updated: 2017/03/12 21:49:08 by mcanal           ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -20,8 +20,8 @@ C_UTIL =	error.c
 
 C_NAME =
 
-C_ASM =
-C_PARSER =	asm_parser.c
+C_ASM =		op.c
+C_PARSER =	asm_parser.c parse_header.c parse_instruction.c
 
 O_DIR = obj
 VPATH =	src/util:src/asm:src/asm/parser:src/corewar
