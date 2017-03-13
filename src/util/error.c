@@ -6,7 +6,7 @@
 /*   By: mcanal <mcanal@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/12 03:39:12 by mcanal            #+#    #+#             */
-/*   Updated: 2017/03/10 17:00:33 by mcanal           ###   ########.fr       */
+/*   Updated: 2017/03/11 21:40:09 by mcanal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,13 +35,16 @@ static int		get_index(t_uint flag)
 void			error(t_uint flag, char *msg)
 {
 	const char	*error[] = {
-		": Too many args.",
+		" [-dump NBR_CYCLES] [[-n NUMBER] FILE.cor]...",
+		" FILE.s",
 		": Ouch... can't read this.",
-		": What the heck is that file? Nah, just try with something else. - ",
-		": Dang. SDL couldn't make it... ",
-		": Damn... Looks like I can't even open a window."
+		": Damn! Can't open file: ",
+		": Dang. Can't close file: ",
+		": What the heck is that file? Nah, just try with something else. - "
 	};
 
+	if (flag & E_USAGE_COREWAR || flag & E_USAGE_ASM)
+		fail("Usage: ");
 	fail(g_exec_name);
 	if (msg)
 	{
@@ -51,8 +54,5 @@ void			error(t_uint flag, char *msg)
 	else
 		failn(error[get_index(flag & (t_uint)~E_NOEXIT)]);
 	if (!(flag & E_NOEXIT))
-	{
-		/* SDL_Quit(); //TODO: check how it's handled if SDL wasn't launched */
 		exit(EXIT_FAILURE);
-	}
 }

@@ -6,7 +6,7 @@
 #    By: mcanal <mcanal@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2014/11/29 13:16:03 by mcanal            #+#    #+#              #
-#    Updated: 2017/03/10 17:32:29 by mc               ###   ########.fr        #
+#    Updated: 2017/03/12 21:49:08 by mcanal           ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -19,22 +19,23 @@ ASM_MAIN =	asm_main.c
 C_UTIL =	error.c
 
 C_NAME =
-C_DOER =	do.c
-C_PARSER =	parse.c
 
-C_ASM =	    asm.c
-
-
+C_ASM =		op.c
+C_PARSER =	asm_parser.c parse_header.c parse_instruction.c
 
 O_DIR = obj
-VPATH =	src/util:src/asm:src/corewar:src/corewar/doer:src/corewar/parser
+VPATH =	src/util:src/asm:src/asm/parser:src/corewar
 
-N_OBJS =	$(C_UTIL:%.c=$(O_DIR)/%.o)	$(NAME_MAIN:%.c=$(O_DIR)/%.o)	\
-			$(C_DOER:%.c=$(O_DIR)/%.o)	$(C_PARSER:%.c=$(O_DIR)/%.o)	\
-			$(C_NAME:%.c=$(O_DIR)/%.o)
-A_OBJS =	$(C_UTIL:%.c=$(O_DIR)/%.o)	$(ASM_MAIN:%.c=$(O_DIR)/%.o)	\
-			$(C_ASM:%.c=$(O_DIR)/%.o)
-DEPS =		$(N_OBJS:%.o=%.d)			$(A_OBJS:%.o=%.d)
+N_OBJS =	$(NAME_MAIN:%.c=$(O_DIR)/%.o)	\
+			$(C_NAME:%.c=$(O_DIR)/%.o)		\
+			$(C_UTIL:%.c=$(O_DIR)/%.o)
+
+A_OBJS =	$(ASM_MAIN:%.c=$(O_DIR)/%.o)	\
+			$(C_ASM:%.c=$(O_DIR)/%.o)		\
+			$(C_UTIL:%.c=$(O_DIR)/%.o)		\
+			$(C_PARSER:%.c=$(O_DIR)/%.o)
+
+DEPS =		$(N_OBJS:%.o=%.d)	$(A_OBJS:%.o=%.d)
 
 RM =		rm -rf
 MKDIR =		mkdir -p
@@ -47,8 +48,7 @@ LIBFT_DIR =	libft
 LIBFT	 =	$(LIBFT_DIR)/libft.a
 N_LIBS = 	$(LIBFT)
 A_LIBS =	$(LIBFT)
-I_DIR =		-I$(LIBFT_DIR)/inc/ -Isrc/util/ -Isrc/asm/ \
-			-Isrc/corewar/ -Isrc/corewar/doer/ -Isrc/corewar/parser
+I_DIR =		-I$(LIBFT_DIR)/inc/ -Iinc/
 
 WHITE =		\033[37;01m
 RED =		\033[31;01m
@@ -108,9 +108,7 @@ fclean: clean
 	@$(RM) $(NAME)
 	@$(RM) $(ASM)
 
-zclean: fclean
+mrproper: fclean
 	@$(MAKE) -C $(LIBFT_DIR) fclean
 
 re: fclean all
-
-brute: zclean all
