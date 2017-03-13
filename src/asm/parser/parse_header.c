@@ -6,7 +6,7 @@
 /*   By: mcanal <zboub@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/12 21:43:56 by mcanal            #+#    #+#             */
-/*   Updated: 2017/03/13 01:10:30 by mcanal           ###   ########.fr       */
+/*   Updated: 2017/03/13 13:54:05 by mcanal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,9 @@ header_t	header = {COREWAR_EXEC_MAGIC, {0}, 0, {0}};
 
 static void				debug_header()
 {
-	ft_debugnbr("magic", header.magic);
+	ft_debugnbr("magic", (int)header.magic);
 	ft_debugstr(NAME_CMD_STRING, header.prog_name);
-	ft_debugnbr("prog_size", header.prog_size);
+	ft_debugnbr("prog_size", (int)header.prog_size);
 	ft_debugstr(COMMENT_CMD_STRING, header.comment);
 	ft_putendl("");
 }

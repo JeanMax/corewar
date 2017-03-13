@@ -6,7 +6,7 @@
 /*   By: mcanal <zboub@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/06/09 14:24:52 by mcanal            #+#    #+#             */
-/*   Updated: 2017/03/13 01:03:49 by mcanal           ###   ########.fr       */
+/*   Updated: 2017/03/13 14:34:37 by mcanal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,18 @@
 
 // <--- DEBUG
 t_instruct	instruct = { {0}, NULL, {{0}}, {0} };
+
+static void				debug_type(t_arg_type type)
+{
+	if (type & T_REG)
+		ft_debugstr("type", "T_REG");
+	if (type & T_DIR)
+		ft_debugstr("type", "T_DIR");
+	if (type & T_IND)
+		ft_debugstr("type", "T_IND");
+	if (type & T_LAB)
+		ft_debugstr("type", "T_LAB");
+}
 
 static void				debug_instruct()
 {
@@ -31,14 +43,7 @@ static void				debug_instruct()
 		while (i < instruct.op->arg_count)
 		{
 			ft_debugstr("arg", *(instruct.arg + i));
-			if (*(instruct.arg_type + i) & T_REG)
-				ft_debugstr("type", "T_REG");
-			if (*(instruct.arg_type + i) & T_DIR)
-				ft_debugstr("type", "T_DIR");
-			if (*(instruct.arg_type + i) & T_IND)
-				ft_debugstr("type", "T_IND");
-			if (*(instruct.arg_type + i) & T_LAB)
-				ft_debugstr("type", "T_LAB");
+			debug_type(*(instruct.arg_type + i));
 			i++;
 		}
 	}
@@ -78,17 +83,23 @@ static enum e_progress	parse_arg(char *arg, size_t len)
 
 	arg_count = 0;
 	arg_swap = arg;
-	while ((size_t)(arg_swap - arg) < len)
+	while ((size_t)(arg_swap - arg) < len && arg_count < MAX_ARGS_NUMBER)
 	{
 		arg_start = arg_swap;
 		while ((size_t)(arg_swap - arg) < len && *arg_swap != SEPARATOR_CHAR)
 			arg_swap++;
 
+		if ((size_t)(arg_swap - arg_start) > MAX_ARG_LENGTH)
+			error(E_INVALID, "Invalid arg (too long).");
 		ft_memcpy(instruct.arg + arg_count, arg_start,	\
 				  (size_t)(arg_swap - arg_start));
 		*(*(instruct.arg + arg_count) + (size_t)(arg_swap - arg_start)) = 0;
 		*(instruct.arg_type + arg_count) = \
 			check_arg_type(*(instruct.arg + arg_count));
+
+		if (!(*(instruct.arg_type + arg_count) & ~T_LAB) &	\
+				*(instruct.op->arg_type + arg_count))
+			error(E_INVALID, "Invalid arg (wrong arg type).");
 
 		if (*arg_swap == SEPARATOR_CHAR)
 			arg_swap++;

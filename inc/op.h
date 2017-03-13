@@ -6,7 +6,7 @@
 /*   By: zaz <marvin@42.fr>                         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/10/04 11:33:27 by zaz               #+#    #+#             */
-/*   Updated: 2017/03/12 23:12:15 by mcanal           ###   ########.fr       */
+/*   Updated: 2017/03/13 13:53:36 by mcanal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,8 +69,8 @@ typedef char	t_arg_type;
 **
 */
 
-# define PROG_NAME_LENGTH		(128)
-# define COMMENT_LENGTH			(2048)
+# define PROG_NAME_LENGTH		(127)
+# define COMMENT_LENGTH			(2047)
 # define COREWAR_EXEC_MAGIC		0xea83f3
 
 typedef struct		header_s
@@ -92,7 +92,7 @@ typedef struct		s_op
 	char				*name;
 	unsigned int		arg_count;
 	t_arg_type			arg_type[MAX_ARGS_NUMBER];
-	t_byte				code;
+	unsigned int		code;
 	unsigned int		cycles_count; //TODO: ???
 	char				*desc;
 	t_bool				carry;

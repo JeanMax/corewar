@@ -6,7 +6,7 @@
 /*   By: mcanal <zboub@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/14 18:21:04 by mcanal            #+#    #+#             */
-/*   Updated: 2017/03/13 00:34:02 by mcanal           ###   ########.fr       */
+/*   Updated: 2017/03/13 14:09:32 by mcanal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,8 @@
 # include <unistd.h>
 
 # define IS_EOL(c) (!c || c == COMMENT_CHAR)
-# define MAX_ARG_LENGTH		32
-# define MAX_LABEL_LENGTH	32
+# define MAX_ARG_LENGTH		31
+# define MAX_LABEL_LENGTH	23
 
 
 /*
@@ -48,6 +48,7 @@ enum					e_progress
 
 /*
 ** instruction struct
+** TODO: error: padding size of 'struct s_instruct' with 4 bytes to alignment boundary
 */
 typedef struct		s_instruct
 {
