@@ -6,7 +6,7 @@
 /*   By: mcanal <zboub@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/12 21:43:56 by mcanal            #+#    #+#             */
-/*   Updated: 2017/03/12 21:45:43 by mcanal           ###   ########.fr       */
+/*   Updated: 2017/03/13 01:10:30 by mcanal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,22 @@
 
 #include "asm_parser.h"
 
+// <--- DEBUG
+header_t	header = {COREWAR_EXEC_MAGIC, {0}, 0, {0}};
+
+static void				debug_header()
+{
+	ft_debugnbr("magic", header.magic);
+	ft_debugstr(NAME_CMD_STRING, header.prog_name);
+	ft_debugnbr("prog_size", header.prog_size);
+	ft_debugstr(COMMENT_CMD_STRING, header.comment);
+	ft_putendl("");
+}
+// DEBUG --->
+
 static void				parse_header(char *line, char *cmd_string)
 {
-	static header_t	header = {COREWAR_EXEC_MAGIC, {0}, 0, {0}}; //TODO
+	static
 	size_t			len;
 
 	if (!ft_strcmp(cmd_string, NAME_CMD_STRING))
@@ -26,26 +39,28 @@ static void				parse_header(char *line, char *cmd_string)
 		if ((len = ft_strlen(line)) > PROG_NAME_LENGTH)
 			error(E_INVALID, "Invalid header (name too long).");
 		ft_memcpy(&header.prog_name, line, len);
-		ft_debugstr(NAME_CMD_STRING, header.prog_name); /* DEBUG */
 	}
 	else
 	{
 		if ((len = ft_strlen(line)) > COMMENT_LENGTH)
 			error(E_INVALID, "Invalid header (comment too long).");
 		ft_memcpy(&header.comment, line, len);
-		ft_debugstr(COMMENT_CMD_STRING, header.comment); /* DEBUG */
+
+		debug_header();
 	}
 
-	//TODO: do something with header + count header.prog_size
+	//TODO: count header.prog_size
 }
 
-static char				*check_header(char *line, char *swap) //TODO: comments
+static char				*check_header(char *line, char *swap)
 {
-	while (*line++ == *swap)
+	while (!IS_EOL(*line) && ft_isspace(*line))
+		line++;
+	while (!IS_EOL(*line) && *line++ == *swap)
 		swap++;
 	if (*swap)
 		error(E_INVALID, "Invalid header (missing identifier).");
-	while (*line && ft_isspace(*line))
+	while (!IS_EOL(*line) && ft_isspace(*line))
 		line++;
 	if (*line != '"')
 		error(E_INVALID, "Invalid header (missing 1st quote).");
@@ -55,7 +70,7 @@ static char				*check_header(char *line, char *swap) //TODO: comments
 	if (*swap != '"')
 		error(E_INVALID, "Invalid header (missing 2nd quote).");
 	*swap++ = 0;
-	while (*swap)
+	while (!IS_EOL(*swap))
 		if (!ft_isspace(*swap++))
 			error(E_INVALID, "Invalid header (weird stuffs after quotes).");
 	return (line);

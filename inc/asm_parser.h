@@ -6,7 +6,7 @@
 /*   By: mcanal <zboub@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/14 18:21:04 by mcanal            #+#    #+#             */
-/*   Updated: 2017/03/12 21:48:16 by mcanal           ###   ########.fr       */
+/*   Updated: 2017/03/13 00:34:02 by mcanal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 
 # include "asm.h"
 
-#include "op.h"
+# include "op.h"
 
 /*
 ** open
@@ -31,6 +31,9 @@
 # include <unistd.h>
 
 # define IS_EOL(c) (!c || c == COMMENT_CHAR)
+# define MAX_ARG_LENGTH		32
+# define MAX_LABEL_LENGTH	32
+
 
 /*
 ** parsing progress enum
@@ -42,6 +45,17 @@ enum					e_progress
 	P_OP = (1 << 1),
 	P_ARG = (1 << 2),
 };
+
+/*
+** instruction struct
+*/
+typedef struct		s_instruct
+{
+	char				label[MAX_LABEL_LENGTH + 1];
+	t_op				*op;
+	char				arg[MAX_ARGS_NUMBER][MAX_ARG_LENGTH + 1];
+	t_arg_type			arg_type[MAX_ARGS_NUMBER];
+}					t_instruct;
 
 /*
 ** parse_header.c
