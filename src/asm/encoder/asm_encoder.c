@@ -1,25 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   asm.h                                              :+:      :+:    :+:   */
+/*   asm_encoder.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mcanal <zboub@42.fr>                       +#+  +:+       +#+        */
+/*   By: mc <mc.maxcanal@gmail.com>                 +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2015/12/14 18:21:04 by mcanal            #+#    #+#             */
-/*   Updated: 2017/03/17 22:33:28 by mcanal           ###   ########.fr       */
+/*   Created: 2017/03/17 22:20:39 by mcanal            #+#    #+#             */
+/*   Updated: 2017/03/17 22:21:20 by mcanal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef ASM_H
-
-# define ASM_H
-
-# include "util.h"
-
 /*
-** asm_lexer.c
+** todo
 */
-void    lex(char *filename);
 
-
-#endif
+#include "asm_encoder.h"

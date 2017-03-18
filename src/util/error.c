@@ -6,7 +6,7 @@
 /*   By: mcanal <mcanal@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/12 03:39:12 by mcanal            #+#    #+#             */
-/*   Updated: 2017/03/11 21:40:09 by mcanal           ###   ########.fr       */
+/*   Updated: 2017/03/18 00:23:58 by mcanal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static int		get_index(t_uint flag)
 	return (index - 1);
 }
 
-void			error(t_uint flag, char *msg)
+t_bool			error(t_uint flag, char *msg)
 {
 	const char	*error[] = {
 		" [-dump NBR_CYCLES] [[-n NUMBER] FILE.cor]...",
@@ -55,4 +55,5 @@ void			error(t_uint flag, char *msg)
 		failn(error[get_index(flag & (t_uint)~E_NOEXIT)]);
 	if (!(flag & E_NOEXIT))
 		exit(EXIT_FAILURE);
+	return (FALSE);
 }

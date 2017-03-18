@@ -6,7 +6,7 @@
 /*   By: zaz <marvin@42.fr>                         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/10/04 11:33:27 by zaz               #+#    #+#             */
-/*   Updated: 2017/03/13 13:53:36 by mcanal           ###   ########.fr       */
+/*   Updated: 2017/03/17 22:49:25 by mcanal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,12 +80,6 @@ typedef struct		header_s
 	unsigned int		prog_size;
 	char				comment[COMMENT_LENGTH + 1];
 }					header_t;
-
-
-# define CODE_LENGTH			(8)
-# define DESC_LENGTH			(128)
-
-typedef unsigned char			t_byte;
 
 typedef struct		s_op
 {

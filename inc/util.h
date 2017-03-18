@@ -6,7 +6,7 @@
 /*   By: mcanal <mcanal@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/29 13:23:15 by mcanal            #+#    #+#             */
-/*   Updated: 2017/03/11 18:04:54 by mcanal           ###   ########.fr       */
+/*   Updated: 2017/03/18 00:18:08 by mcanal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 # define UTIL_H
 
 # include "libft.h"
+# include "op.h"
 
 /*
 ** error code enum
@@ -31,6 +32,10 @@ enum					e_error
 	E_INVALID = (1 << 6)
 };
 
+typedef unsigned char			t_byte;
+typedef unsigned short			t_word;
+typedef unsigned int			t_dword;
+
 /*
 ** globad
 */
@@ -39,6 +44,6 @@ extern char				*g_exec_name;
 /*
 ** error.c
 */
-void					error(t_uint flag, char *msg);
+t_bool					error(t_uint flag, char *msg);
 
 #endif

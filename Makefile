@@ -6,47 +6,52 @@
 #    By: mcanal <mcanal@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2014/11/29 13:16:03 by mcanal            #+#    #+#              #
-#    Updated: 2017/03/13 14:33:14 by mcanal           ###   ########.fr        #
+#    Updated: 2017/03/17 22:54:05 by mcanal           ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
 NAME =	corewar
 ASM =	asm
 
-NAME_MAIN =	corewar_main.c
-ASM_MAIN =	asm_main.c
+C_UTIL =	error.c op.c
 
-C_UTIL =	error.c
+C_NAME =	corewar_main.c
 
-C_NAME =
-
-C_ASM =		op.c
-C_PARSER =	asm_parser.c parse_header.c parse_instruction.c
+C_ASM =		asm_main.c
+C_LEXER =	asm_lexer.c read_header.c read_instruction.c
+C_PARSER =	asm_parser.c
+C_ENCODER = asm_encoder.c
 
 O_DIR = obj
-VPATH =	src/util:src/asm:src/asm/parser:src/corewar
+VPATH =	src/util:src/asm:src/asm/lexer:src/asm/parser:src/asm/encoder:src/corewar
 
-N_OBJS =	$(NAME_MAIN:%.c=$(O_DIR)/%.o)	\
-			$(C_NAME:%.c=$(O_DIR)/%.o)		\
+N_OBJS =	$(C_NAME:%.c=$(O_DIR)/%.o)		\
 			$(C_UTIL:%.c=$(O_DIR)/%.o)
 
-A_OBJS =	$(ASM_MAIN:%.c=$(O_DIR)/%.o)	\
-			$(C_ASM:%.c=$(O_DIR)/%.o)		\
+A_OBJS =	$(C_ASM:%.c=$(O_DIR)/%.o)		\
 			$(C_UTIL:%.c=$(O_DIR)/%.o)		\
-			$(C_PARSER:%.c=$(O_DIR)/%.o)
+			$(C_PARSER:%.c=$(O_DIR)/%.o)	\
+			$(C_LEXER:%.c=$(O_DIR)/%.o)		\
+			$(C_ENCODER:%.c=$(O_DIR)/%.o)
 
 DEPS =		$(N_OBJS:%.o=%.d)	$(A_OBJS:%.o=%.d)
 
 RM =		rm -rf
 MKDIR =		mkdir -p
 MAKE =		make -j
-ECHO =      echo -e
+ECHO =		echo -e
 CC =		$(shell clang --version >/dev/null 2>&1 && echo clang || echo gcc)
+UNAME_S =   $(shell uname -s)
+ifeq ($(UNAME_S), Linux)
+  ECHO = echo -e
+else ifeq ($(UNAME_S), Darwin)
+  ECHO = echo
+endif
 
 CFLAGS =	-Wall -Wextra -Werror -O2
 LIBFT_DIR =	libft
-LIBFT	 =	$(LIBFT_DIR)/libft.a
-N_LIBS = 	$(LIBFT)
+LIBFT =		$(LIBFT_DIR)/libft.a
+N_LIBS =	$(LIBFT)
 A_LIBS =	$(LIBFT)
 I_DIR =		-I$(LIBFT_DIR)/inc/ -Iinc/
 
@@ -57,7 +62,7 @@ YELLOW =	\033[33;01m
 BLUE =		\033[34;01m
 BASIC =		\033[0m
 
-.PHONY: all debug sanitize me_cry clean fclean zclean re brute
+.PHONY: all debug sanitize me_cry clean fclean mrproper re
 
 all:
 	@$(MAKE) -C $(LIBFT_DIR) $(FLAGS)
