@@ -6,7 +6,7 @@
 /*   By: mcanal <zboub@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/06/09 14:24:52 by mcanal            #+#    #+#             */
-/*   Updated: 2017/03/18 00:54:23 by mcanal           ###   ########.fr       */
+/*   Updated: 2017/03/19 20:06:11 by mcanal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,22 +17,20 @@
 #include "asm_lexer.h"
 
 // <--- DEBUG
-t_instruct_read	instruct = { {0}, {0}, 0, {{0}} };
-
-static void				debug_instruct()
+static void				debug_instruct(t_instruct_read *instruct)
 {
-	ft_debugstr("label", instruct.label);
-	ft_debugstr("op", instruct.op);
-	ft_debugnbr("argc", instruct.argc);
-
-	for (int i = 0; i < instruct.argc; i++)
-		ft_debugstr("argv", instruct.argv[i]);
 	ft_putendl("");
+	ft_debugstr("label", instruct->label);
+	ft_debugstr("op", instruct->op);
+	ft_debugnbr("argc", instruct->argc);
+
+	for (int i = 0; i < instruct->argc; i++)
+		ft_debugstr("argv", instruct->argv[i]);
 }
 // DEBUG --->
 
 
-static enum e_progress	read_arg(char *arg, size_t len)
+static t_progress		read_arg(char *arg, size_t len, t_instruct_read *instruct)
 {
 	char	*arg_start;
 	char	*arg_swap;
@@ -48,9 +46,9 @@ static enum e_progress	read_arg(char *arg, size_t len)
 
 		if ((size_t)(arg_swap - arg_start) > MAX_ARG_LENGTH)
 			error(E_INVALID, "Invalid arg (too long).");
-		ft_memcpy(instruct.argv + arg_count, arg_start,	\
+		ft_memcpy(instruct->argv + arg_count, arg_start,	\
 				  (size_t)(arg_swap - arg_start));
-		*(*(instruct.argv + arg_count) + (size_t)(arg_swap - arg_start)) = 0;
+		*(*(instruct->argv + arg_count) + (size_t)(arg_swap - arg_start)) = 0;
 
 		if (*arg_swap == SEPARATOR_CHAR)
 			arg_swap++;
@@ -59,21 +57,21 @@ static enum e_progress	read_arg(char *arg, size_t len)
 	if (arg_count > MAX_ARGS_NUMBER)
 		error(E_INVALID, "Invalid arg (too many).");
 
-	instruct.argc = arg_count;
+	instruct->argc = arg_count;
 	return (P_ARG);
 }
 
-static enum e_progress	read_op(char *op, size_t len)
+static t_progress		read_op(char *op, size_t len, t_instruct_read *instruct)
 {
 	if (len > MAX_OP_CODE_LENGTH)
 		error(E_INVALID, "Invalid op (too long).");
-	ft_memcpy(&instruct.op, op, len);
-	*(instruct.op + len) = 0;
+	ft_memcpy(&instruct->op, op, len);
+	*(instruct->op + len) = 0;
 
 	return (P_OP);
 }
 
-static enum e_progress	read_label(char *label, size_t len)
+static t_progress		read_label(char *label, size_t len, t_instruct_read *instruct)
 {
 	char	*label_swap;
 
@@ -84,13 +82,15 @@ static enum e_progress	read_label(char *label, size_t len)
 
 	if (len > MAX_LABEL_LENGTH)
 		error(E_INVALID, "Invalid label (too long).");
-	ft_memcpy(&instruct.label, label, len);
-	*(instruct.label + len) = 0;
+	ft_memcpy(&instruct->label, label, len);
+	*(instruct->label + len) = 0;
 
 	return (P_LABEL);
 }
 
-static enum e_progress	read_instruction(char *line, enum e_progress progress)
+static t_progress		read_instruction(char *line, \
+											t_progress progress, \
+											t_instruct_read *instruct)
 {
 	char		*word_start;
 
@@ -106,38 +106,42 @@ static enum e_progress	read_instruction(char *line, enum e_progress progress)
 	{
 		if (progress & P_LABEL || progress & P_OP)
 			error(E_INVALID, "Invalid label (label/op already found).");
-		progress |= read_label(word_start, (size_t)(line - word_start - 1));
+		progress |= read_label(word_start, (size_t)(line - word_start - 1), instruct);
 	}
 	else if (!(progress & P_OP))
-		progress |= read_op(word_start, (size_t)(line - word_start));
+		progress |= read_op(word_start, (size_t)(line - word_start), instruct);
 	else
-		progress |= read_arg(word_start, (size_t)(line - word_start));
+		progress |= read_arg(word_start, (size_t)(line - word_start), instruct);
 
-	return (read_instruction(line, progress));
+	return (read_instruction(line, progress, instruct));
 }
 
-void					read_loop(int fd)
+void					read_loop(void)
 {
 	int				ret;
 	char			*line;
-	enum e_progress	progress;
+	t_progress		progress;
+	t_instruct_read	instruct;
 
+	ft_bzero(&instruct, sizeof(t_instruct_read));
 	line = NULL;
-	if (!(ret = get_next_line(fd, &line)))
+	if (!(ret = get_next_line(g_fd, &line)))
 		return ;
 	else if (ret == -1)
 		error(E_READ, NULL);
 
-	progress = read_instruction(line, P_NOPROGRESS);
+	progress = read_instruction(line, P_NOPROGRESS, &instruct);
+	ft_memdel((void **)&line);
 	if (!(!progress //nothing found
 		  || (progress & P_LABEL && !(progress & P_OP)) //just a label
 		  || (progress & P_OP && progress & P_ARG))) //(label +) op + arg
 		error(E_INVALID, "Something's wrong with that instruction.");
 
 	if (progress)
-		debug_instruct();			/* DEBUG */
-	ft_bzero(&instruct, sizeof(t_instruct_read));
+	{
+		debug_instruct(&instruct);			/* DEBUG */
+		parse_instruct(&instruct);
+	}
 
-	ft_memdel((void **)&line);
-	read_loop(fd);
+	read_loop();
 }

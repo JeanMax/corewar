@@ -6,7 +6,7 @@
 /*   By: mcanal <mcanal@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/10 00:12:49 by mcanal            #+#    #+#             */
-/*   Updated: 2017/03/11 17:46:02 by mcanal           ###   ########.fr       */
+/*   Updated: 2017/03/19 20:05:17 by mcanal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,8 @@
 
 #include "corewar.h"
 
-char			*g_exec_name;
+char			*g_exec_name = NULL;
+int				g_fd = -1;
 
 int				main(int ac, char **av)
 {

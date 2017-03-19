@@ -6,7 +6,7 @@
 /*   By: mcanal <zboub@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/12 21:43:56 by mcanal            #+#    #+#             */
-/*   Updated: 2017/03/18 00:36:05 by mcanal           ###   ########.fr       */
+/*   Updated: 2017/03/19 20:53:10 by mcanal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,20 +16,7 @@
 
 #include "asm_lexer.h"
 
-// <--- DEBUG
-header_t	header = {COREWAR_EXEC_MAGIC, {0}, 0, {0}};
-
-static void				debug_header()
-{
-	ft_debugnbr("magic", (int)header.magic);
-	ft_debugstr(NAME_CMD_STRING, header.prog_name);
-	ft_debugnbr("prog_size", (int)header.prog_size);
-	ft_debugstr(COMMENT_CMD_STRING, header.comment);
-	ft_putendl("");
-}
-// DEBUG --->
-
-static enum e_progress	parse_header(char *line, enum e_progress progress)
+static void				parse_header(char *line, t_progress progress, header_t *header)
 {
 	static
 	size_t			len;
@@ -38,17 +25,15 @@ static enum e_progress	parse_header(char *line, enum e_progress progress)
 	{
 		if ((len = ft_strlen(line)) > PROG_NAME_LENGTH)
 			error(E_INVALID, "Invalid header (name too long).");
-		ft_memcpy(&header.prog_name, line, len);
+		ft_memcpy(&header->prog_name, line, len);
 	}
 	else if (progress & P_COMMENT)
 	{
 		if ((len = ft_strlen(line)) > COMMENT_LENGTH)
 			error(E_INVALID, "Invalid header (comment too long).");
-		ft_memcpy(&header.comment, line, len);
+		ft_memcpy(&header->comment, line, len);
 	}
-
-	return (progress);
-	//TODO: count header.prog_size
+	//TODO: count header->prog_size
 }
 
 static void				read_quoted_string(char *line)
@@ -66,7 +51,7 @@ static void				read_quoted_string(char *line)
 			error(E_INVALID, "Invalid header (weird stuffs after quotes).");
 }
 
-static enum e_progress	read_identifier(char *line)
+static t_progress		read_identifier(char *line)
 {
 	if (!ft_strncmp(line, NAME_CMD_STRING, ft_strlen(NAME_CMD_STRING)))
 		return (P_NAME);
@@ -77,9 +62,9 @@ static enum e_progress	read_identifier(char *line)
 	return (P_NOPROGRESS);
 }
 
-static enum e_progress	check_header(char *line)
+static t_progress		check_header(char *line, header_t *header)
 {
-	enum e_progress	progress;
+	t_progress	progress;
 
 	while (!IS_EOL(*line) && ft_isspace(*line))
 		line++;
@@ -95,26 +80,28 @@ static enum e_progress	check_header(char *line)
 
 	read_quoted_string(line);
 
-	return (parse_header(line + 1, progress));
+	parse_header(line + 1, progress, header);
+
+	return (progress);
 }
 
-void					read_header(int fd)
+void					read_header(header_t *header)
 {
 	int				ret;
 	char			*line;
-	enum e_progress	progress;
+	t_progress	progress;
 
 	progress = P_NOPROGRESS;
 	while (!(progress & P_NAME && progress & P_COMMENT))
 	{
 		line = NULL;
-		if (!(ret = get_next_line(fd, &line)) || ret == -1)
+		if (!(ret = get_next_line(g_fd, &line)) || ret == -1)
 			error(E_READ, NULL);
 
-		progress |= check_header(line);
+		progress |= check_header(line, header);
 
 		ft_memdel((void **)&line);
 	}
 
-	debug_header();
+	header->magic = COREWAR_EXEC_MAGIC;
 }

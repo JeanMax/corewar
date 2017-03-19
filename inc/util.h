@@ -6,7 +6,7 @@
 /*   By: mcanal <mcanal@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/29 13:23:15 by mcanal            #+#    #+#             */
-/*   Updated: 2017/03/18 00:18:08 by mcanal           ###   ########.fr       */
+/*   Updated: 2017/03/19 19:36:50 by mcanal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ typedef unsigned int			t_dword;
 ** globad
 */
 extern char				*g_exec_name;
+extern int				g_fd;
 
 /*
 ** error.c

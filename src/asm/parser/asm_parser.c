@@ -6,76 +6,61 @@
 /*   By: mcanal <zboub@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/06/09 14:24:52 by mcanal            #+#    #+#             */
-/*   Updated: 2017/03/17 23:19:47 by mcanal           ###   ########.fr       */
+/*   Updated: 2017/03/19 20:43:49 by mcanal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 /*
-** parse .s files
+** -store label as key in labels, with value = cor.len
+** -push op in cor
+** -push arg-type in cor
+** -push argv.len empty bytes in cor
+** -if label in argv:
+** 	-recurse to read_loop()
+** -ninja-copy argv in cor
 */
 
 #include "asm_parser.h"
 
-/* static void				debug_type(t_arg_type type) */
-/* { */
-/* 	if (type & T_REG) */
-/* 		ft_debugstr("type", "T_REG"); */
-/* 	if (type & T_DIR) */
-/* 		ft_debugstr("type", "T_DIR"); */
-/* 	if (type & T_IND) */
-/* 		ft_debugstr("type", "T_IND"); */
-/* 	if (type & T_LAB) */
-/* 		ft_debugstr("type", "T_LAB"); */
-/* } */
+static t_op		*parse_op(char *op, t_instruct_parsed *instruct_p)
+{
+	t_op	*op_tab_swap;
 
+	op_tab_swap = op_tab;
+	while (op_tab_swap->name && ft_strcmp(op_tab_swap->name, op))
+		op_tab_swap++;
+	if (!op_tab_swap->name)
+		error(E_INVALID, "Invalid op (not found).");
 
-/* static t_arg_type		check_arg_type(char *arg) */
-/* { */
-/* 	int			i; */
-/* 	t_arg_type	ret; */
+	instruct_p->op = op_tab_swap;
+	ft_arrpush(g_cor, (void *)(t_ulong)op_tab_swap->code, -1);
+	return (op_tab_swap);
+}
 
-/* 	ret = T_IND; */
-/* 	if (*arg == 'r') */
-/* 	{ */
-/* 		i = ft_atoi(++arg); */
-/* 		if (i < 1 || i > REG_NUMBER) */
-/* 			error(E_INVALID, "Invalid register (REG_NUMBER not in range)."); */
-/* 		ret = T_REG; */
-/* 	} */
-/* 	else if (*arg == DIRECT_CHAR && ++arg) */
-/* 		ret = T_DIR; */
+static void		parse_label(char *label, t_dword addr)
+{
+	if (!*label)
+		return ;
+	if (ft_hget(g_labels, label))
+		error(E_INVALID, "Invalid label (appears twice).");
+	ft_hset(g_labels, ft_strdup(label), (void *)(t_ulong)addr);
+}
 
-/* 	if (*arg == LABEL_CHAR && ret != T_REG) */
-/* 		return (T_LAB | ret); //TODO: check if label exists, eventually after... */
-/* 	while (*arg) */
-/* 		if (!ft_isdigit(*arg++)) */
-/* 			error(E_INVALID, "Invalid arg (not a number)."); */
-/* 	return (ret); */
-/* } */
+void			parse_instruct(t_instruct_read *instruct_r)
+{
+	t_instruct_parsed	instruct_p;
 
-/* static enum e_progress	read_arg(char *arg, size_t len) */
-/* { */
-/* 		*(instruct.arg_type + arg_count) = \ */
-/* 			check_arg_type(*(instruct.arg + arg_count)); */
+	if (g_cor->length > CHAMP_MAX_SIZE)
+		error(E_INVALID, "Invalid champion (too big).");
 
-/* 		if (!(*(instruct.arg_type + arg_count) & ~T_LAB) &	\ */
-/* 				*(instruct.op->arg_type + arg_count)) */
-/* 			error(E_INVALID, "Invalid arg (wrong arg type)."); */
+	ft_bzero(&instruct_p, sizeof(t_instruct_parsed));
+	instruct_p.addr = g_cor->length;
 
-/* 	if (arg_count != instruct.op->arg_count) */
-/* 		error(E_INVALID, "Invalid arg (wrong number)."); */
-/* 	return (P_ARG); */
-/* } */
-
-
-
-
-	//TODO: parse_op:
-	/* t_op	*op_tab_swap; */
-
-	/* op_tab_swap = op_tab; */
-	/* while (op_tab_swap->name && ft_memcmp(op_tab_swap->name, op, len)) */
-	/* 	op_tab_swap++; */
-	/* if (!op_tab_swap->name) */
-	/* 	error(E_INVALID, "Invalid op (not found)."); */
-	/* instruct.op = op_tab_swap; */
+	parse_label(instruct_r->label, g_cor->length);
+	if (*instruct_r->op)
+	{
+		parse_op(instruct_r->op, &instruct_p);
+		parse_args(instruct_r, &instruct_p);
+		encode(instruct_r, &instruct_p);
+	}
+}

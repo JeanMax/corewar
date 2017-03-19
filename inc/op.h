@@ -6,15 +6,13 @@
 /*   By: zaz <marvin@42.fr>                         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/10/04 11:33:27 by zaz               #+#    #+#             */
-/*   Updated: 2017/03/17 22:49:25 by mcanal           ###   ########.fr       */
+/*   Updated: 2017/03/18 19:13:01 by mcanal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef OP_H
 
 # define OP_H
-
-# include "asm.h"
 
 /*
 ** Toutes les tailles sont en octets.
@@ -89,8 +87,8 @@ typedef struct		s_op
 	unsigned int		code;
 	unsigned int		cycles_count; //TODO: ???
 	char				*desc;
-	t_bool				carry;
-	t_bool				todo; //TODO: ???
+	int					carry; //bool
+	int					todo; //TODO: bool ???
 }					t_op;
 
 extern t_op				op_tab[];

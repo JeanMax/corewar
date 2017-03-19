@@ -6,7 +6,7 @@
 /*   By: mcanal <zboub@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/14 18:21:04 by mcanal            #+#    #+#             */
-/*   Updated: 2017/03/17 22:51:57 by mcanal           ###   ########.fr       */
+/*   Updated: 2017/03/19 20:44:41 by mcanal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,14 +18,9 @@
 
 
 /*
-** instruction struct after parsing
+** parse_args.c
 */
-typedef struct		s_instruct_parsed
-{
-	t_op				*op;
-	t_arg_type			arg_type[MAX_ARGS_NUMBER];
-	t_dword				arg[MAX_ARGS_NUMBER];
-}					t_instruct_parsed;
-
+void				parse_args(t_instruct_read *instruct_r, \
+							   t_instruct_parsed *instruct_p);
 
 #endif

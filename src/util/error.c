@@ -6,7 +6,7 @@
 /*   By: mcanal <mcanal@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/12 03:39:12 by mcanal            #+#    #+#             */
-/*   Updated: 2017/03/18 00:23:58 by mcanal           ###   ########.fr       */
+/*   Updated: 2017/03/19 19:38:31 by mcanal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,16 @@
 */
 
 #include "util.h"
+
+/*
+** exit
+*/
 #include <stdlib.h>
+
+/*
+** close
+*/
+# include <unistd.h>
 
 /*
 ** I'm pretty sure there is another way...
@@ -53,6 +62,8 @@ t_bool			error(t_uint flag, char *msg)
 	}
 	else
 		failn(error[get_index(flag & (t_uint)~E_NOEXIT)]);
+	if (g_fd != -1)
+		close(g_fd);
 	if (!(flag & E_NOEXIT))
 		exit(EXIT_FAILURE);
 	return (FALSE);
