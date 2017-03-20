@@ -1,0 +1,87 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   write_cor.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mc <mc.maxcanal@gmail.com>                 +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2017/03/20 00:19:15 by mcanal            #+#    #+#             */
+/*   Updated: 2017/03/20 01:44:43 by mcanal           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+/*
+** todo
+*/
+
+#include "asm_encoder.h"
+
+/*
+** open
+*/
+# include <sys/types.h>
+# include <sys/stat.h>
+# include <fcntl.h>
+
+/*
+** write
+*/
+#include <unistd.h>
+
+/*
+** close
+*/
+# include <unistd.h>
+
+//TODO: use that somewhere in asm_encoder.c
+static t_dword	swap_bytes(t_dword d)
+{
+	return ((d & 0x000000ff) << 24
+			| (d & 0x0000ff00) << 8
+			| (d & 0x00ff0000) >> 8
+			| (d & 0xff000000) >> 24);
+}
+
+static void		add_header(header_t *header)
+{
+	t_byte	*header_ptr;
+	t_uint	size;
+
+	header->magic = swap_bytes(COREWAR_EXEC_MAGIC);
+	header->prog_size = swap_bytes(g_cor->length);
+	size = sizeof(header_t);
+	header_ptr = (t_byte *)header + size - 1;
+	while (size--)
+		ft_arrpush(g_cor, (void *)(t_ulong)*header_ptr--, 0); //TODO: ok this is ugly, soooorry
+}
+
+static char		*get_output_name(char *filename)
+{
+	char	*outname;
+	size_t	len;
+
+	len = ft_strlen(filename) + 3;
+	outname = ft_memalloc(len);
+	ft_memcpy(outname, filename, len - 4);
+	ft_memcpy(outname +  len - 4, "cor", 3); //TODO: do not hardcode "cor"
+
+	return (outname);
+}
+
+void			write_cor(char *filename, header_t *header)
+{
+	char	*outname;
+
+	outname = get_output_name(filename);
+	if ((g_fd = open(outname, O_WRONLY)) == -1)
+		error(E_OPEN, outname);
+
+	add_header(header);
+	if (write(g_fd, g_cor->ptr, g_cor->length) == -1)
+		error(E_WRITE, outname);
+
+	if (close(g_fd) == -1)
+		error(E_CLOSE, outname);
+
+	ft_memdel((void *)&outname);
+}

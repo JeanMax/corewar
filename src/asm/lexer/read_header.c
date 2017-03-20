@@ -6,7 +6,7 @@
 /*   By: mcanal <zboub@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/12 21:43:56 by mcanal            #+#    #+#             */
-/*   Updated: 2017/03/19 20:53:10 by mcanal           ###   ########.fr       */
+/*   Updated: 2017/03/20 01:04:57 by mcanal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,4 @@ void					read_header(header_t *header)
 
 		ft_memdel((void **)&line);
 	}
-
-	header->magic = COREWAR_EXEC_MAGIC;
 }

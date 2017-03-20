@@ -6,7 +6,7 @@
 /*   By: mc <mc.maxcanal@gmail.com>                 +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/17 22:30:58 by mcanal            #+#    #+#             */
-/*   Updated: 2017/03/19 20:55:33 by mcanal           ###   ########.fr       */
+/*   Updated: 2017/03/20 01:46:54 by mcanal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 */
 
 #include "asm_lexer.h"
-
 
 /*
 ** open
@@ -29,40 +28,40 @@
 */
 # include <unistd.h>
 
-// <--- DEBUG
-static void				debug_header(header_t *header)
-{
-	ft_debugnbr("magic", (int)header->magic);
-	ft_debugstr(NAME_CMD_STRING, header->prog_name);
-	ft_debugnbr("prog_size", (int)header->prog_size);
-	ft_debugstr(COMMENT_CMD_STRING, header->comment);
-	/* ft_putendl(""); */
-}
+/* // <--- DEBUG */
+/* static void				debug_header(header_t *header) */
+/* { */
+/* 	ft_debugnbr("magic", (int)header->magic); */
+/* 	ft_debugstr(NAME_CMD_STRING, header->prog_name); */
+/* 	ft_debugnbr("prog_size", (int)header->prog_size); */
+/* 	ft_debugstr(COMMENT_CMD_STRING, header->comment); */
+/* 	/\* ft_putendl(""); *\/ */
+/* } */
 
-#include <stdio.h>
-static void				debug_cor()
-{
-	ft_debugnbr("cor.length", (int)g_cor->length);
-	ft_debugnbr("cor.alloc_len", (int)g_cor->alloc_len);
-	for (size_t i = 0; i < g_cor->length; i++)
-		printf("0x%x ", *(t_byte *)ft_arrget(g_cor, i));
-	fflush(stdout);
-	ft_putendl(g_cor->length ? "\n" : "");
-}
+/* #include <stdio.h> */
+/* static void				debug_cor() */
+/* { */
+/* 	ft_debugnbr("cor.length", (int)g_cor->length); */
+/* 	ft_debugnbr("cor.alloc_len", (int)g_cor->alloc_len); */
+/* 	for (size_t i = 0; i < g_cor->length; i++) */
+/* 		printf("0x%x ", *(t_byte *)ft_arrget(g_cor, i)); */
+/* 	fflush(stdout); */
+/* 	ft_putendl(g_cor->length ? "\n" : ""); */
+/* } */
 
-static void				debug_hnode(t_hnode *node)
-{
-	ft_debugstr("labels.key", (char *)node->key);
-	ft_debugnbr("labels.value", (int)node->value);
-}
+/* static void				debug_hnode(t_hnode *node) */
+/* { */
+/* 	ft_debugstr("labels.key", (char *)node->key); */
+/* 	ft_debugnbr("labels.value", (int)node->value); */
+/* } */
 
-static void				debug_labels()
-{
-	ft_debugnbr("labels.length", (int)g_labels->length);
-	ft_hiter(g_labels, debug_hnode);
-	ft_putendl("");
-}
-// DEBUG --->
+/* static void				debug_labels() */
+/* { */
+/* 	ft_debugnbr("labels.length", (int)g_labels->length); */
+/* 	ft_hiter(g_labels, debug_hnode); */
+/* 	ft_putendl(""); */
+/* } */
+/* // DEBUG ---> */
 
 static void				check_filename(char *filename)
 {
@@ -81,19 +80,20 @@ void					lex(char *filename)
 	if ((g_fd = open(filename, O_RDONLY)) == -1)
 		error(E_OPEN, filename);
 
-	//TODO: move the struct init part to the main?
 	ft_bzero(&header, sizeof(header_t));
 	read_header(&header);
-	debug_header(&header);		/* DEBUG */
+	/* debug_header(&header);		/\* DEBUG *\/ */
 
 	init_data();
 	read_loop();
-	debug_cor();	/* DEBUG */
-	debug_labels();	/* DEBUG */
+	/* debug_cor();	/\* DEBUG *\/ */
+	/* debug_labels();	/\* DEBUG *\/ */
 
 	ft_hdel(&g_labels);
 	if (close(g_fd) == -1)
 		error(E_CLOSE, filename);
-	//TODO: write file
+
+	write_cor(filename, &header);
+	/* debug_cor();	/\* DEBUG *\/ */
 	ft_arrdel(&g_cor);
 }

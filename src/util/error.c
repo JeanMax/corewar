@@ -6,7 +6,7 @@
 /*   By: mcanal <mcanal@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/01/12 03:39:12 by mcanal            #+#    #+#             */
-/*   Updated: 2017/03/19 19:38:31 by mcanal           ###   ########.fr       */
+/*   Updated: 2017/03/20 00:36:27 by mcanal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,8 @@ t_bool			error(t_uint flag, char *msg)
 		": Ouch... can't read this.",
 		": Damn! Can't open file: ",
 		": Dang. Can't close file: ",
-		": What the heck is that file? Nah, just try with something else. - "
+		": What the heck is that file? Nah, just try with something else. - ",
+		": Ooops! Can't write to file: ",
 	};
 
 	if (flag & E_USAGE_COREWAR || flag & E_USAGE_ASM)

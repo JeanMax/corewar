@@ -6,7 +6,7 @@
 /*   By: mc <mc.maxcanal@gmail.com>                 +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/19 20:43:23 by mcanal            #+#    #+#             */
-/*   Updated: 2017/03/19 20:45:18 by mcanal           ###   ########.fr       */
+/*   Updated: 2017/03/20 01:48:13 by mcanal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,22 +16,20 @@
 
 #include "asm_parser.h"
 
-
-// <--- DEBUG
-static void			debug_type(t_arg_type type)
-{
-	if (type & T_REG)
-		ft_debugstr("type", "T_REG");
-	if (type & T_DIR)
-		ft_debugstr("type", "T_DIR");
-	if (type & T_IND)
-		ft_debugstr("type", "T_IND");
-	if (type & T_LAB)
-		ft_debugstr("type", "T_LAB");
-	ft_putendl("-");
-}
-
-// DEBUG --->
+/* // <--- DEBUG */
+/* static void			debug_type(t_arg_type type) */
+/* { */
+/* 	if (type & T_REG) */
+/* 		ft_debugstr("type", "T_REG"); */
+/* 	if (type & T_DIR) */
+/* 		ft_debugstr("type", "T_DIR"); */
+/* 	if (type & T_IND) */
+/* 		ft_debugstr("type", "T_IND"); */
+/* 	if (type & T_LAB) */
+/* 		ft_debugstr("type", "T_LAB"); */
+/* 	ft_putendl("-"); */
+/* } */
+/* // DEBUG ---> */
 
 static t_uint		parse_arg_length(t_arg_type arg_type, t_byte op_code)
 {
@@ -87,7 +85,7 @@ void				parse_args(t_instruct_read *instruct_r, \
 		*(instruct_p->arg_length + i) = \
 			parse_arg_length(*(instruct_p->arg_type + i), instruct_p->op->code);
 
-		debug_type(*(instruct_p->arg_type + i));			/* DEBUG */
+		/* debug_type(*(instruct_p->arg_type + i));			/\* DEBUG *\/ */
 
 		if (!(*(instruct_p->arg_type + i) & ~T_LAB) &	\
 				*(instruct_p->op->arg_type + i))

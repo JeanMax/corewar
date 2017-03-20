@@ -6,7 +6,7 @@
 /*   By: mcanal <mcanal@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/29 13:23:15 by mcanal            #+#    #+#             */
-/*   Updated: 2017/03/19 19:36:50 by mcanal           ###   ########.fr       */
+/*   Updated: 2017/03/20 00:35:48 by mcanal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,8 @@ enum					e_error
 	E_READ = (1 << 3),
 	E_OPEN = (1 << 4),
 	E_CLOSE = (1 << 5),
-	E_INVALID = (1 << 6)
+	E_INVALID = (1 << 6),
+	E_WRITE = (1 << 7)
 };
 
 typedef unsigned char			t_byte;

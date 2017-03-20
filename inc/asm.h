@@ -6,7 +6,7 @@
 /*   By: mcanal <zboub@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/14 18:21:04 by mcanal            #+#    #+#             */
-/*   Updated: 2017/03/19 20:54:52 by mcanal           ###   ########.fr       */
+/*   Updated: 2017/03/20 00:27:24 by mcanal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ extern t_htable			*g_labels;
 void					init_data(void);
 
 /*
+** LEXER
 ** asm_lexer.c
 */
 void					lex(char *filename);
@@ -65,14 +66,20 @@ void					lex(char *filename);
 void					read_loop(void);
 
 /*
+** PARSER
 ** asm_parser.c
 */
 void					parse_instruct(t_instruct_read *instruct);
 
 /*
+** ENCODER
 ** asm_encoder.c
 */
 void					encode(t_instruct_read *instruct_r, \
 							   t_instruct_parsed *instruct_p);
+/*
+**  write_cor.c
+*/
+void					write_cor(char *filename, header_t *header);
 
 #endif

@@ -6,7 +6,7 @@
 #    By: mcanal <mcanal@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2014/11/29 13:16:03 by mcanal            #+#    #+#              #
-#    Updated: 2017/03/19 20:53:57 by mcanal           ###   ########.fr        #
+#    Updated: 2017/03/20 00:45:16 by mcanal           ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -20,7 +20,7 @@ C_NAME =	corewar_main.c
 C_ASM =		asm_main.c		init_data.c
 C_LEXER =	asm_lexer.c		read_header.c	read_instruction.c
 C_PARSER =	asm_parser.c	parse_args.c
-C_ENCODER = asm_encoder.c
+C_ENCODER = asm_encoder.c	write_cor.c
 
 TEST = test.sh
 
