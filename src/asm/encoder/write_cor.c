@@ -6,7 +6,7 @@
 /*   By: mc <mc.maxcanal@gmail.com>                 +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/20 00:19:15 by mcanal            #+#    #+#             */
-/*   Updated: 2017/03/20 01:44:43 by mcanal           ###   ########.fr       */
+/*   Updated: 2017/03/20 02:23:29 by mc               ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,13 @@
 */
 # include <unistd.h>
 
+/* static t_word	swap_word(t_word w) */
+/* { */
+/* 	return ((w >> 8) | (w << 8)); */
+/* } */
+
 //TODO: use that somewhere in asm_encoder.c
-static t_dword	swap_bytes(t_dword d)
+static t_dword	swap_dword(t_dword d)
 {
 	return ((d & 0x000000ff) << 24
 			| (d & 0x0000ff00) << 8
@@ -47,8 +52,8 @@ static void		add_header(header_t *header)
 	t_byte	*header_ptr;
 	t_uint	size;
 
-	header->magic = swap_bytes(COREWAR_EXEC_MAGIC);
-	header->prog_size = swap_bytes(g_cor->length);
+	header->magic = swap_dword(COREWAR_EXEC_MAGIC);
+	header->prog_size = swap_dword(g_cor->length);
 	size = sizeof(header_t);
 	header_ptr = (t_byte *)header + size - 1;
 	while (size--)

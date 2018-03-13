@@ -6,7 +6,7 @@
 /*   By: mcanal <mcanal@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/29 13:23:15 by mcanal            #+#    #+#             */
-/*   Updated: 2017/03/20 00:35:48 by mcanal           ###   ########.fr       */
+/*   Updated: 2017/03/20 02:21:44 by mc               ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,11 @@ enum					e_error
 typedef unsigned char			t_byte;
 typedef unsigned short			t_word;
 typedef unsigned int			t_dword;
+
+# define BSWAP_WORD(x) ((t_word) ((((x) >> 8) & 0xff) | (((x) & 0xff) << 8)))
+
+# define BSWAP_DWORD(x) ((((x) & 0xff000000) >> 24) | (((x) & 0x00ff0000) >> 8)	\
+						| (((x) & 0x0000ff00) << 8) | (((x) & 0x000000ff) << 24))
 
 /*
 ** globad
