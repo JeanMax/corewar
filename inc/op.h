@@ -6,15 +6,13 @@
 /*   By: zaz <marvin@42.fr>                         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/10/04 11:33:27 by zaz               #+#    #+#             */
-/*   Updated: 2017/03/12 23:12:15 by mcanal           ###   ########.fr       */
+/*   Updated: 2017/03/18 19:13:01 by mcanal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef OP_H
 
 # define OP_H
-
-# include "asm.h"
 
 /*
 ** Toutes les tailles sont en octets.
@@ -69,8 +67,8 @@ typedef char	t_arg_type;
 **
 */
 
-# define PROG_NAME_LENGTH		(128)
-# define COMMENT_LENGTH			(2048)
+# define PROG_NAME_LENGTH		(127)
+# define COMMENT_LENGTH			(2047)
 # define COREWAR_EXEC_MAGIC		0xea83f3
 
 typedef struct		header_s
@@ -81,22 +79,16 @@ typedef struct		header_s
 	char				comment[COMMENT_LENGTH + 1];
 }					header_t;
 
-
-# define CODE_LENGTH			(8)
-# define DESC_LENGTH			(128)
-
-typedef unsigned char			t_byte;
-
 typedef struct		s_op
 {
 	char				*name;
 	unsigned int		arg_count;
 	t_arg_type			arg_type[MAX_ARGS_NUMBER];
-	t_byte				code;
+	unsigned int		code;
 	unsigned int		cycles_count; //TODO: ???
 	char				*desc;
-	t_bool				carry;
-	t_bool				todo; //TODO: ???
+	int					carry; //bool
+	int					todo; //TODO: bool ???
 }					t_op;
 
 extern t_op				op_tab[];
